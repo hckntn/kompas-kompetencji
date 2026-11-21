@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174A75">
+  <meta name="description" content="Kompas Kompetencji — działający lokalnie prototyp procesu oceny pracownika służby cywilnej.">
+  <title>Kompas Kompetencji — HackNation MVP v0.4</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/institutional-ui.css">
+  <!-- Zwykłe skrypty, bez modułów i fetch plików: działa także przez file:// -->
+  <script defer src="data/competencies.js"></script>
+  <script defer src="data/knowledge.js"></script>
+  <script defer src="data/procedures.js"></script>
+  <script defer src="data/first-rules.js"></script>
+  <script defer src="js/assessment.js"></script>
+  <script defer src="js/validation.js"></script>
+  <script defer src="js/workflow.js"></script>
+  <script defer src="js/session.js"></script>
+  <script defer src="js/engine.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/assistant.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <noscript><div class="noscript">Aby uruchomić aplikację, włącz JavaScript w przeglądarce.</div></noscript>
+  <a class="skip-link" href="#main-content">Przejdź do treści</a>
+  <div id="app" aria-live="off"></div>
+  <div id="print-report" class="print-only" aria-hidden="true"></div>
+  <div class="phone-block" role="note"><div class="phone-symbol">▣</div><h1>Wersja na komputer</h1><p>Zgodnie z założeniami wyzwania Kompas Kompetencji jest przeznaczony do pracy na komputerach, a nie na smartfonach.</p></div>
+</body>
+</html>
