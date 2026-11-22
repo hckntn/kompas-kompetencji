@@ -101,8 +101,8 @@ def main():
         page.wait_for_function('document.querySelectorAll(".chat-bot").length >= 2')
         assert 'Brak wystarczającej podstawy' in page.locator('.chat-bot').last.inner_text()
         # Public static AI mode: explicit opt-in and source-grounded response.
-        page.locator('button[data-action="set-mode"][data-mode="browser"]').click()
-        assert page.locator('.browser-ai-settings').count()==1
+        page.locator('#assistant-mode-select').select_option('browser')
+        assert page.locator('.assistant-modal').count()==1
         assert page.locator('button[data-action="enable-browser-ai"]').count()==1
         page.evaluate('''() => {
           const ai = window.KOMPAS_BROWSER_LLM;

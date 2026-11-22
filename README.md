@@ -119,3 +119,7 @@ Narzędzia testowe wymagają Node.js oraz środowiska Python/Playwright/Chromium
 **Kolejne kroki:** wdrożenie i weryfikacja Online AI na osobnym adresie, integracja oficjalnych wskaźników i formularzy, pełna ścieżka oceny okresowej, weryfikowalny asystent LLM z odwołaniami do źródeł oraz model bezpieczeństwa i uprawnień.
 
 Materiały konkursowe: [opis wyzwania](references/opis-wyzwania.pdf), [regulamin](references/regulamin-zadania.pdf).
+
+### v0.6.3 — stabilny układ asystenta
+
+Tryb AI wybiera się z listy w nagłówku panelu, niezależnie od położenia edytora wiadomości. Zgoda AI Online, ustawienia Ollama oraz uruchamianie WebGPU są dostępne w osobnym oknie. Przycisk **Wyczyść rozmowę** kasuje tylko historię chatu z lokalnej sesji, nie rusza danych oceny. Eksport rozmowy nie jest wymagany w briefie konkursowym i nie został wprowadzony ze względów minimalizacji danych.

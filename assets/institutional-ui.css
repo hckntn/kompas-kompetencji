@@ -406,3 +406,42 @@ select:focus-visible {outline:3px solid #8bb6f0;outline-offset:2px;}
 @media screen and (max-width: 700px) {
   .header-assistant-toggle { display: none; }
 }
+
+/* v0.6.3: stabilny układ asystenta; ustawienia w dialogu, edytor stale na dole. */
+@media screen {
+  .app-grid.assistant-expanded .assistant { min-height:0; overflow:hidden; }
+  .assistant-head { flex:0 0 auto; padding:17px 15px 11px; }
+  .assistant-body { flex:1 1 auto; min-height:0; overflow-y:auto; padding:16px 15px; }
+  .assistant-bottom { flex:0 0 auto; padding:12px 15px 13px; }
+  .assistant-bottom textarea { min-height:68px; max-height:100px; font-size:13px; }
+  .assistant-modebar { display:flex; gap:8px; align-items:center; justify-content:space-between; margin-top:13px; }
+  .assistant-modebar label { font-size:12px; font-weight:700; color:#344E64; }
+  .assistant-modebar-actions { display:flex; align-items:center; gap:6px; min-width:0; }
+  #assistant-mode-select { width:139px; max-width:100%; border:1px solid #C8D5DF; background:#FFF; color:#174A75; padding:8px 6px; border-radius:4px; font-size:12px; font-weight:650; }
+  .assistant-settings-button { border:1px solid #C8D5DF; border-radius:4px; background:#F4F7FA; color:#174A75; width:32px; height:34px; flex-shrink:0; font-size:17px; }
+  .assistant-meta { display:flex; align-items:center; justify-content:space-between; gap:7px; margin-top:8px; flex-wrap:wrap; }
+  .assistant-meta .assistant-status { font-size:10px; line-height:1.3; padding:5px 7px; margin:0; }
+  .assistant-clear-button { border:0; background:transparent; color:#174A75; font-size:11px; font-weight:700; padding:4px 0; }
+  .assistant-clear-button:disabled { opacity:.4; cursor:not-allowed; }
+  .chat-history { max-height:none; overflow:visible; margin-top:8px; }
+  .assistant-intro { margin:12px auto 22px; }
+  .assistant-caveat { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:7px 0 0; line-height:1.4; font-size:10px; }
+  .assistant-caveat button { border:0; background:transparent; color:#174A75; text-decoration:underline; font-size:10px; padding:2px 0; }
+  .assistant-modal-layer { position:fixed; inset:0; z-index:101; display:flex; align-items:center; justify-content:center; padding:18px; }
+  .assistant-modal-backdrop { position:absolute; inset:0; background:rgba(18,38,55,.55); }
+  .assistant-modal { position:relative; background:#FFF; width:min(480px,100%); max-height:min(85vh,760px); overflow-y:auto; border:1px solid #C8D5DF; box-shadow:0 15px 50px rgba(0,0,0,.22); border-radius:7px; padding:20px; outline:0; }
+  .assistant-modal-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; border-bottom:1px solid #E5EBF0; padding-bottom:12px; }
+  .assistant-modal-head h3 { margin:0; font-size:17px; color:#174A75; line-height:1.35; }
+  .assistant-modal-close { background:#F4F7FA; border:1px solid #C8D5DF; color:#174A75; border-radius:4px; width:32px; height:32px; font-size:22px; flex-shrink:0; }
+  .assistant-modal-content { font-size:13px; color:#344E64; line-height:1.55; }
+  .assistant-modal-content p { margin:13px 0; }
+  .assistant-modal-content label { display:block; margin:14px 0; font-weight:650; font-size:12px; }
+  .assistant-modal-content input { width:100%; display:block; border:1px solid #C8D5DF; padding:9px; border-radius:4px; margin-top:5px; font-size:13px; }
+  .assistant-modal-content small { color:#566B7E; }
+  .assistant-modal-content .btn { width:100%; margin:8px 0 4px; }
+  .assistant-modal-actions { display:flex; justify-content:flex-end; margin-top:18px; }
+  .assistant-modebar button:focus-visible,.assistant-clear-button:focus-visible,.assistant-modal button:focus-visible,#assistant-mode-select:focus-visible,.assistant-caveat button:focus-visible { outline:3px solid #8BB6F0; outline-offset:2px; }
+}
+@media screen and (max-width:1110px) {
+  .app-grid.assistant-expanded .assistant { overflow:hidden; }
+}

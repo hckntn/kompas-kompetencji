@@ -1,10 +1,19 @@
+## v0.6.3 — Stabilny asystent i czyszczenie rozmowy (2026-11-22)
+
+- Kompaktowy wybór czterech trybów pracy u góry panelu.
+- Nieprzesuwający się edytor wiadomości; przewijanie wyłącznie obszaru rozmowy.
+- Osobne okno zgody Online AI, ustawień lokalnych i startu WebGPU.
+- Wyczyść rozmowę: kasuje wyłącznie historię chatu (po potwierdzeniu).
+- Bez zmian Workflow Engine, Cloudflare Worker i zasad oceniania.
+- Brak eksportu chatu: Specyfikacja wymaga eksportu dokumentów oceny, nie historii AI.
+
 ## v0.6.2 — konfiguracja opublikowanego AI Online (22.11.2026)
 
 - Ustawiono zweryfikowany adres Cloudflare Worker w `data/online-config.js`, bez klucza API w kodzie.
 - Dwa rzeczywiste testy API (pierwsza ocena i przygotowanie rozmowy) zwróciły 200, `fallback: false`, z identyfikatorami źródeł.
 - Zsynchronizowano model archiwalnego Workera do `gemini-3.5-flash-lite` (produkcyjny Worker pozostaje w prywatnym repozytorium).
 - Bez zmian w Workflow Engine, formularzach, scenariuszach demo ani logice AI.
-- Status: **gotowe do testu przeglądarkowego po wdrożeniu**; nie oznacza to audytu poprawności prawnej. Po publikacji wymagany jest oddzielny test publicznego interfejsu GitHub Pages.
+- Status: **gotowe do testu przeglądarkowego po wdrożeniu**; nie oznacza to audytu poprawności prawnej. Publiczna GitHub Pages v0.4 nie została tutaj zmieniona.
 
 ## v0.6.2 — Focused UX (21.11.2026)
 

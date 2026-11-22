@@ -17,13 +17,14 @@ def main():
           };
         }''')
         page.locator('.header-assistant-toggle').click()
-        page.locator('button[data-mode="online"]').click()
-        assert page.locator('.ai-online-settings').count()==1
+        page.locator('#assistant-mode-select').select_option('online')
+        assert page.locator('.assistant-modal[role="dialog"]').count()==1
         assert page.locator('button[data-action="enable-online-ai"]').count()==1
+        page.locator('button[data-action="close-assistant-dialog"]').last.click()
         page.locator('#assistant-question').fill('Jakie elementy pierwszej oceny?')
         page.locator('.send-btn').click()
         assert page.locator('.chat-bot').count()==0
-        assert 'włącz' in page.locator('.notice').inner_text()
+        assert page.locator('.assistant-modal').is_visible()
         page.locator('button[data-action="enable-online-ai"]').click()
         page.locator('#assistant-question').fill('Jakie elementy pierwszej oceny?')
         page.locator('.send-btn').click()

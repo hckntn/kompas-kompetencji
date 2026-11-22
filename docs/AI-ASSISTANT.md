@@ -46,3 +46,10 @@ Pierwsze pobranie może obejmować setki MB danych. Wybrany wariant modelu wymag
 - Baza materiałów źródłowych aplikacji: `data/knowledge.js` (linki ELI/KPRM)
 
 Wdrożenie do urzędu wymaga audytu prawa, ochrony danych osobowych, modeli, komponentów, integralności pobieranych zasobów i testowania błędów generacji.
+
+
+## Interfejs asystenta v0.6.3
+
+Tryb pracy wybiera się z rozwijanej listy u góry panelu. Zgoda na AI Online, ustawienia Ollama oraz uruchomienie WebGPU znajdują się w osobnym oknie modalnym, aby nie przesuwać edytora pytań. Część historii rozmowy jest przewijalna niezależnie od pola wprowadzania.
+
+Przycisk **Wyczyść rozmowę** wymaga potwierdzenia i usuwa wyłącznie `state.assistant.chat` z bieżącej sesji, nie dotyka danych oceny. Sam chat nie jest automatycznie eksportowany; wymagania konkursowe mówią o dokumentacji oceny, nie o eksporcie dialogu z AI.
