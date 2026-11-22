@@ -32,7 +32,7 @@ Kompas Kompetencji to aplikacja wspierająca przełożonych w prowadzeniu ocen p
 
 Scenariusz **„Ocena okresowa — demo”** uruchamia drugą ścieżkę, która pozostaje **demonstracyjna**.
 
-## Co działa w wersji v0.5 (na bazie v0.4)
+## Co działa w obecnej wersji (na bazie v0.4)
 
 - **Workflow Engine** — prowadzenie przez etapy, walidacja przejść, stan procesu i historia techniczna.
 - **Pierwsza ocena** — pięć elementów wskazanych w rozporządzeniu z 23 lipca 2015 r. (Dz.U. 2015 poz. 1144).
