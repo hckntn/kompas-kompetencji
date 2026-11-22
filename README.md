@@ -1,8 +1,10 @@
+**v0.6.4:** poprawki AI QA i cztery widoczne tryby AI (siatka 2×2). Frontend i Cloudflare Worker wymagają zsynchronizowanego wdrożenia.
+
 ## Focused UX — v0.6.2
 
 W tej wersji **Asystent wiedzy** otwiera się przyciskiem **Asystent** w nagłówku. Domyślnie jest zwinięty, aby nie zasłaniał procesu oceny. `Escape` zamyka panel; podczas testu scenariusza `Asystent wiedzy` otwiera się automatycznie. Opis ograniczeń prototypu jest zwięzły i rozwijany przyciskiem **Szczegóły**. Menu **Scenariusze testowe** nadal jest dostępne na pierwszym etapie.
 
-**Wydanie v0.6.2:** sprawdzona baza kodu do konkursowego demo. Weryfikację działania strony i AI w opublikowanym interfejsie wykonaj po aktualizacji GitHub Pages. Zob. [testy](docs/UX-FOCUSED.md).
+**Wersja kandydująca:** ta paczka nie została automatycznie opublikowana w repozytorium ani na GitHub Pages. Zob. [porównanie i testy](docs/UX-FOCUSED.md).
 
 ## Scenariusze testowe (v0.6.2)
 
@@ -18,7 +20,7 @@ W kroku **Rozpoczęcie** wybierz **Scenariusze testowe**. Menu obejmuje pięć f
 
 Kompas Kompetencji to aplikacja wspierająca przełożonych w prowadzeniu ocen pracowników służby cywilnej. Łączy uporządkowany proces, pomocnicze wskaźniki zachowań, reguły oceny, przygotowanie rozmowy oraz roboczą dokumentację. **Oceny cząstkowe wybiera przełożony — aplikacja nie zastępuje jego decyzji.**
 
-> **Status: v0.6.2 — Online AI + Scenariusze testowe + Focused UX.** Worker wdrożono osobno, a Gemini zwrócił rzeczywiste odpowiedzi na pytania o pierwszą ocenę i przygotowanie rozmowy (22.11.2026). Integracja w publicznym interfejsie wymaga odrębnego testu po wdrożeniu. Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
+> **Status: v0.6.2 — Online AI + Scenariusze testowe + Focused UX (wersja kandydująca).** Publiczne demo nadal korzysta z v0.4; Worker wdrożono osobno, a Gemini zwrócił rzeczywiste odpowiedzi na pytania o pierwszą ocenę i przygotowanie rozmowy (22.11.2026). Integracja w interfejsie wymaga jeszcze testu na GitHub Pages. Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
 
 ![Widok pierwszej oceny](examples/first-path.png)
 
@@ -32,7 +34,7 @@ Kompas Kompetencji to aplikacja wspierająca przełożonych w prowadzeniu ocen p
 
 Scenariusz **„Ocena okresowa — demo”** uruchamia drugą ścieżkę, która pozostaje **demonstracyjna**.
 
-## Co działa w obecnej wersji (na bazie v0.4)
+## Co działa w wersji v0.5 (na bazie v0.4)
 
 - **Workflow Engine** — prowadzenie przez etapy, walidacja przejść, stan procesu i historia techniczna.
 - **Pierwsza ocena** — pięć elementów wskazanych w rozporządzeniu z 23 lipca 2015 r. (Dz.U. 2015 poz. 1144).
@@ -119,6 +121,7 @@ Narzędzia testowe wymagają Node.js oraz środowiska Python/Playwright/Chromium
 **Kolejne kroki:** wdrożenie i weryfikacja Online AI na osobnym adresie, integracja oficjalnych wskaźników i formularzy, pełna ścieżka oceny okresowej, weryfikowalny asystent LLM z odwołaniami do źródeł oraz model bezpieczeństwa i uprawnień.
 
 Materiały konkursowe: [opis wyzwania](references/opis-wyzwania.pdf), [regulamin](references/regulamin-zadania.pdf).
+
 
 ### v0.6.3 — stabilny układ asystenta
 

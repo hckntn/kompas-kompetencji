@@ -445,3 +445,43 @@ select:focus-visible {outline:3px solid #8bb6f0;outline-offset:2px;}
 @media screen and (max-width:1110px) {
   .app-grid.assistant-expanded .assistant { overflow:hidden; }
 }
+
+/* AI request preflight: visible inside the stable composer without relying on main-page notice. */
+.assistant-inline-feedback { margin:7px 0 0; color:#8B3323; background:#FFF4EE; border-left:3px solid #BA643F; padding:7px 9px; font-size:11px; line-height:1.45; }
+
+/* v0.6.4: cztery zawsze widoczne tryby, kompaktowa siatka 2x2. */
+@media screen {
+  .assistant-modebar { margin-top:12px; }
+  .assistant-modebar .assistant-mode-title { font-size:12px; font-weight:700; color:#344E64; }
+  .assistant-mode-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px;
+    width:100%;
+    margin-top:7px;
+  }
+  .assistant-mode-choice {
+    min-width:0;
+    min-height:36px;
+    padding:7px 5px;
+    background:#F4F7FA;
+    color:#174A75;
+    border:1px solid #D3DEE8;
+    border-radius:4px;
+    font-size:12px;
+    line-height:1.22;
+    font-weight:700;
+    cursor:pointer;
+    white-space:normal;
+    text-align:center;
+  }
+  .assistant-mode-choice.active {
+    color:#FFF;
+    background:#174A75;
+    border-color:#174A75;
+  }
+  .assistant-mode-choice:hover:not(:disabled):not(.active) { background:#E5EFF7; border-color:#9FBBD0; }
+  .assistant-mode-choice:focus-visible { outline:3px solid #8BB6F0; outline-offset:2px; }
+  .assistant-mode-choice:disabled { opacity:.55; cursor:wait; }
+  .assistant-settings-button { min-height:34px; }
+}

@@ -1,3 +1,5 @@
+**v0.6.4 — исправления QA и панель четырёх режимов 2×2.** Для работы требуется обновить и сайт, и Cloudflare Worker. Новые исправления ещё нуждаются в проверке реального Gemini после публикации.
+
 ## v0.6.2 — AI Online подключён к развёрнутому Worker (22.11.2026)
 
 - Публичный endpoint: `https://kompas-kompetencji-ai.hckntn.workers.dev`; **ключ Gemini только в Cloudflare Secret**, в архиве его нет.

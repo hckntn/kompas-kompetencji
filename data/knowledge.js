@@ -26,7 +26,7 @@ window.KOMPAS_KNOWLEDGE = Object.freeze([
   {
     id:'B3', title:'Opis zadania — rozdział 3: Asystent AI', group:'Brief HackNation 2026',
     keywords:['rozmowa','pracownikiem','pytania','feedback','informacja zwrotna','przygotowanie','argumenty'],
-    text:'Asystent wspiera zrozumienie wymogów formalnych i pomaga przygotować rozmowę z pracownikiem: proponuje pytania, tematy do omówienia i uporządkowanie argumentacji.',
+    text:'Asystent pomaga przygotować rozmowę, proponując pytania i tematy. Przykładowe pytania metodyczne, nie urzędowe: W jakich sytuacjach współpraca przebiegała dobrze? Które sytuacje sprawiły trudność? Jak wyjaśniłeś rozbieżności? Jakiego wsparcia potrzebujesz? Jakie działania podejmiesz następnym razem?',
     answer:'Przygotuj przykłady zaobserwowanych zachowań, ich wpływ na pracę oraz pytania o perspektywę pracownika. W rozmowie omów mocne strony, konkretne obszary rozwoju i oczekiwania na kolejny okres.'
   },
   {

@@ -28,7 +28,8 @@ window.KOMPAS_ASSISTANT = (function () {
   async function ask(query,config){
     const baseline=offline(query);
     if(config.mode==='online') {
-      if(!baseline.supported || !baseline.sources.length) return baseline;
+      // The Worker has its own authoritative retrieval rules and vetted KB.
+      // Do NOT suppress an online request based on the weaker local Offline matcher.
       if(!window.KOMPAS_ONLINE_AI) throw new Error('AI Online niedostępny.');
       return window.KOMPAS_ONLINE_AI.ask(query);
     }

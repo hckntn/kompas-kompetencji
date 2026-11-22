@@ -20,7 +20,7 @@ def main():
           }
         }""")
         page.locator('.header-assistant-toggle').click()
-        page.locator('#assistant-mode-select').select_option('online')
+        page.locator('.assistant-mode-choice[data-mode="online"]').click()
         assert page.locator('button[data-action="enable-online-ai"]').count()==1
         page.locator('button[data-action="enable-online-ai"]').click()
         page.locator('#assistant-question').fill('Jakie elementy pierwszej oceny?')

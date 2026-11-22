@@ -8,6 +8,7 @@
   let demoMenuOpen=false;
   let assistantOpen=false; // UI-only: initially closed on every page load
   let assistantDraft=""; // preserve unfinished question when rerendering
+  let assistantFeedback=""; // display preflight errors next to input, not elsewhere
   let assistantDialog=null; // modal settings / consent, never stored
   let prototypeDetailsOpen=false;
   let browserAiLoading=false;
@@ -133,17 +134,18 @@
   }
   function renderAssistant(){
     const conf=state.assistant;
-    const suggestions=['Jakie elementy pierwszej oceny?','Jakie oceny 3, 5 i 7?','Kiedy pierwsza ocena jest pozytywna?'];
+    const suggestions=['Jakie elementy pierwszej oceny?','Co oznaczają oceny 3, 5 i 7 w pierwszej ocenie?','Kiedy pierwsza ocena jest pozytywna?'];
     const browserReady=browserAi?.ready()||false;
     const statusLabel=conf.mode==='online'?(onlineConsent?'AI Online · włączony':'AI Online · wymaga zgody'):conf.mode==='offline'?'Offline · bez LLM':conf.mode==='browser'?(browserReady?'WebGPU · gotowe':'WebGPU · wymaga uruchomienia'):'Ollama · lokalny model';
-    const options=[['online','AI Online'],['offline','Offline'],['ollama','Ollama AI'],['browser','AI WebGPU']];
-    const choices=options.map(([id,label])=>`<option value="${id}" ${conf.mode===id?'selected':''}>${label}</option>`).join('');
+    const options=[['offline','Offline'],['online','AI Online'],['ollama','Ollama AI'],['browser','AI WebGPU']];
+    const choices=options.map(([id,label])=>`<button type="button" class="assistant-mode-choice ${conf.mode===id?'active':''}" data-action="set-assistant-mode" data-mode="${id}" aria-pressed="${conf.mode===id}" ${conf.busy?'disabled':''}>${label}</button>`).join('');
     const chatHtml=conf.chat.map(row=>`<div class="chat-message ${row.role==='user'?'chat-user':'chat-bot'}"><div class="chat-bubble">${escapeHtml(row.text)}</div>${row.sources?.length?`<div class="chat-sources"><span>Źródła:</span> ${row.sources.map(src=>`<a class="source-pill" href="${escapeHtml(src.url||'#')}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(src.title)}">${escapeHtml(src.id)}</a>`).join('')}</div>`:''}${['ollama','browser','online'].includes(row.mode)?'<small class="chat-mode">Odpowiedź LLM; wskazane źródła nie stanowią automatycznej weryfikacji.</small>':''}</div>`).join('');
     return `<aside class="assistant" id="knowledge-assistant" aria-label="Asystent wiedzy">
       <div class="assistant-head"><div class="assistant-top"><div class="assistant-avatar">✳</div><div><h2>Asystent wiedzy</h2><p>Wskazuje źródła, nie ocenia osób</p></div><button type="button" class="assistant-close" data-action="toggle-assistant" aria-label="Zamknij asystenta">×</button></div>
-      <div class="assistant-modebar"><label for="assistant-mode-select">Tryb pracy</label><div class="assistant-modebar-actions"><select id="assistant-mode-select" aria-label="Tryb pracy asystenta">${choices}</select><button type="button" class="assistant-settings-button" data-action="open-assistant-settings" title="Ustawienia i bezpieczeństwo" aria-label="Ustawienia trybu AI">⚙</button></div></div>
+      <div class="assistant-modebar"><span class="assistant-mode-title" id="assistant-mode-title">Tryb pracy</span><button type="button" class="assistant-settings-button" data-action="open-assistant-settings" title="Ustawienia i bezpieczeństwo" aria-label="Ustawienia trybu AI">⚙</button></div>
+      <div class="assistant-mode-grid" role="group" aria-labelledby="assistant-mode-title">${choices}</div>
       <div class="assistant-meta"><span class="assistant-status"><span class="status-dot ${conf.mode!=='offline'?'active':''}"></span>${escapeHtml(statusLabel)}</span><button type="button" class="assistant-clear-button" data-action="clear-chat" ${!conf.chat.length||conf.busy?'disabled':''} title="Usuń tylko wiadomości czatu, bez zmiany oceny">Wyczyść rozmowę</button></div></div>
-      <div class="assistant-body" id="assistant-chat-scroll">${!conf.chat.length?`<div class="assistant-intro"><div class="assistant-sparkle">✧</div><h3>W czym mogę pomóc?</h3><p>Zapytaj o zasady oceny lub przygotowanie rozmowy.</p></div><div class="quick-questions">${suggestions.map(item=>`<button type="button" data-action="ask-preset" data-q="${escapeHtml(item)}">${item}<span>↗</span></button>`).join('')}</div>`:''}<div id="assistant-chat" class="chat-history">${chatHtml}${conf.busy?'<div class="chat-busy" role="status">Model przygotowuje odpowiedź…</div>':''}</div></div>
+      <div class="assistant-body" id="assistant-chat-scroll">${!conf.chat.length?`<div class="assistant-intro"><div class="assistant-sparkle">✧</div><h3>W czym mogę pomóc?</h3><p>Zapytaj o zasady oceny lub przygotowanie rozmowy.</p></div><div class="quick-questions">${suggestions.map(item=>`<button type="button" data-action="ask-preset" data-q="${escapeHtml(item)}">${item}<span>↗</span></button>`).join('')}</div>`:''}<div id="assistant-chat" class="chat-history">${chatHtml}${conf.busy?'<div class="chat-busy" role="status">Model przygotowuje odpowiedź…</div>':''}${assistantFeedback?`<p class="assistant-inline-feedback" role="status">${escapeHtml(assistantFeedback)}</p>`:''}</div></div>
       <div class="assistant-bottom"><form id="assistant-form"><label class="sr-only" for="assistant-question">Pytanie do asystenta</label><textarea id="assistant-question" rows="2" placeholder="Napisz pytanie o proces…" ${conf.busy?'disabled':''}>${escapeHtml(assistantDraft)}</textarea><button aria-label="Wyślij pytanie" type="submit" class="send-btn" ${conf.busy?'disabled':''}>➤</button></form><p class="assistant-caveat">Nie wpisuj danych osobowych. <button type="button" data-action="open-assistant-settings">Źródła i zasady</button></p></div>${renderAssistantDialog()}</aside>`;
   }
   function renderPeriodicPrintReport(){const t=E.totals(state), c=state.case, m=state.meeting;
@@ -202,9 +204,20 @@
       case 'export-json':download(JSON.stringify(exportData(),null,2),'kompas-ocena-demo.json','application/json');break;
       case 'export-txt':download(exportText(),'kompas-ocena-demo.txt','text/plain');break;
       case 'ask-preset':askAssistant(target.dataset.q);break;
+      case 'set-assistant-mode':{
+        const mode=target.dataset.mode;
+        if(state.assistant.busy || !['online','offline','ollama','browser'].includes(mode))break;
+        state.assistant.mode=mode;
+        assistantFeedback='';
+        assistantDialog=(mode==='online'&&!onlineConsent)||(mode==='browser'&&!browserAi?.ready())?mode:null;
+        save();render();
+        if(assistantDialog)q('.assistant-modal')?.focus();
+        else q(`.assistant-mode-choice[data-mode="${mode}"]`)?.focus();
+        break;
+      }
       case 'open-assistant-settings':assistantDialog=state.assistant.mode;render();q('.assistant-modal')?.focus();break;
       case 'close-assistant-dialog':assistantDialog=null;render();q('.assistant-settings-button')?.focus();break;
-      case 'clear-chat':if(!state.assistant.busy && state.assistant.chat.length && window.confirm('Wyczyścić historię rozmowy? Dane oceny pozostaną bez zmian.')){state.assistant.chat=[];assistantDraft='';save();render();}break;
+      case 'clear-chat':if(!state.assistant.busy && state.assistant.chat.length && window.confirm('Wyczyścić historię rozmowy? Dane oceny pozostaną bez zmian.')){state.assistant.chat=[];assistantDraft='';assistantFeedback='';save();render();}break;
       case 'revoke-online-ai':onlineConsent=false;assistantDialog=null;render();break;
       case 'enable-browser-ai':prepareBrowserAi();break;
       case 'enable-online-ai':if(window.KOMPAS_ONLINE_AI?.configured()){onlineConsent=true;assistantDialog=null;render();q('#assistant-question')?.focus();}break;
@@ -235,25 +248,33 @@
     }finally{browserAiLoading=false;if(browserAi?.ready())assistantDialog=null;render();}
   }
   async function askAssistant(text){
-    if(state.assistant.busy)return;
-    const queryText=(text||'').trim();if(!queryText)return;
+    if(state.assistant.busy){assistantFeedback='Poprzednie pytanie jest jeszcze przetwarzane. Poczekaj na odpowiedź.';render();return;}
+    const queryText=(text||'').replace(/\s+/g,' ').trim();
+    if(!queryText){assistantFeedback='Wpisz pytanie przed wysłaniem.';render();return;}
     if(state.assistant.mode==='online') {
-      if(!onlineConsent){assistantDialog='online';render();q('.assistant-modal')?.focus();return;}
-      if(window.KOMPAS_ONLINE_AI?.looksPrivate(queryText)){notify('Nie wysyłaj danych osobowych ani informacji o konkretnych pracownikach do AI Online.');return;}
+      if(!onlineConsent){assistantFeedback='Najpierw włącz AI Online, a następnie wyślij pytanie ponownie.';assistantDialog='online';render();q('.assistant-modal')?.focus();return;}
+      if(window.KOMPAS_ONLINE_AI?.looksPrivate(queryText)){assistantFeedback='Pytanie może zawierać dane osobowe. Nie zostało wysłane. Użyj fikcyjnego lub ogólnego przykładu.';render();return;}
     }
-    assistantDraft='';state.assistant.chat.push({role:'user',text:queryText});state.assistant.busy=true;save();render();
+    assistantFeedback='';assistantDraft='';state.assistant.chat.push({role:'user',text:queryText});state.assistant.busy=true;save();render();
     try{
       const response=await A.ask(queryText,{mode:state.assistant.mode,endpoint:state.assistant.endpoint,model:state.assistant.model});
       state.assistant.chat.push({role:'assistant',...response,sources:(response.sources||[]).map(s=>({id:s.id,title:s.title,url:s.url||''}))});
     }catch(e){
-      const fallback=A.offline(queryText);
-      state.assistant.chat.push({role:'assistant',text:'Usługa AI jest niedostępna lub zapytanie odrzucono ('+String(e.message).slice(0,160)+'). Tryb Offline: '+fallback.text,sources:fallback.sources.map(s=>({id:s.id,title:s.title,url:s.url||''})),mode:'offline'});
+      const code=String(e.code||'');
+      const refused=['no_source','personal_data_or_control_chars','rate_limited','bad_length'].includes(code);
+      if(refused){
+        state.assistant.chat.push({role:'assistant',text:'AI Online — zapytanie nie zostało zrealizowane: '+String(e.message).slice(0,270),sources:[],mode:'system'});
+      }else{
+        const fallback=A.offline(queryText);
+        const supported=Boolean(fallback.supported && fallback.sources?.length);
+        state.assistant.chat.push({role:'assistant',text:'AI Online — błąd: '+String(e.message).slice(0,180)+(supported?'\n\nOdpowiedź awaryjna Offline: '+fallback.text:'\nBrak zweryfikowanej odpowiedzi Offline.'),sources:supported?fallback.sources.map(src=>({id:src.id,title:src.title,url:src.url||''})):[],mode:'system'});
+      }
     }finally{state.assistant.busy=false;save();render();}
   }
   root.addEventListener('click',e=>{const target=e.target.closest('[data-action]');if(target&&root.contains(target))applyClick(target);else if(demoMenuOpen && !e.target.closest('.demo-picker')){demoMenuOpen=false;render();}});
   document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(assistantDialog){assistantDialog=null;render();q('.assistant-settings-button')?.focus();}else if(demoMenuOpen){demoMenuOpen=false;render();q('.demo-picker-trigger')?.focus();}else if(assistantOpen){assistantOpen=false;render();q('.header-assistant-toggle')?.focus();}});
   root.addEventListener('input',e=>{const t=e.target;if(t.id==='assistant-question')assistantDraft=t.value;if(t.matches('[data-field]'))updateField(t.name,t.value);});
-  root.addEventListener('change',e=>{const t=e.target;if(t.id==='assistant-mode-select'){state.assistant.mode=t.value;assistantDialog=(t.value==='online'&&!onlineConsent)||(t.value==='browser'&&!browserAi?.ready())?'online'===t.value?'online':'browser':null;save();render();if(assistantDialog)q('.assistant-modal')?.focus();else q('#assistant-mode-select')?.focus();return;}if(t.matches('[data-field]')){updateField(t.name,t.value);}});
+  root.addEventListener('change',e=>{const t=e.target;if(t.matches('[data-field]'))updateField(t.name,t.value);});
   root.addEventListener('submit',e=>{if(e.target?.id==='assistant-form'){e.preventDefault();const field=q('#assistant-question');askAssistant(field?.value||'');}});
   root.addEventListener('keydown',e=>{if(e.target?.id==='assistant-question'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();askAssistant(e.target.value);}});
   window.KOMPAS_DEBUG={getDemo:()=>D.current(state),getState:()=>JSON.parse(JSON.stringify(state)),totals:()=>E.totals(state),procedure:()=>W.getProcedure(state.case.track),canNavigate:target=>W.canNavigate(state,target),fillDemo:()=>{S.fillDemo(state);save();render();}};

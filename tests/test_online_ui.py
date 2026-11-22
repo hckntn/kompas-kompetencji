@@ -17,7 +17,7 @@ def main():
           };
         }''')
         page.locator('.header-assistant-toggle').click()
-        page.locator('#assistant-mode-select').select_option('online')
+        page.locator('.assistant-mode-choice[data-mode="online"]').click()
         assert page.locator('.assistant-modal[role="dialog"]').count()==1
         assert page.locator('button[data-action="enable-online-ai"]').count()==1
         page.locator('button[data-action="close-assistant-dialog"]').last.click()
@@ -36,7 +36,7 @@ def main():
         page.locator('#assistant-question').fill('Dane: pracownika Joanna Kowalska')
         page.locator('.send-btn').click()
         assert page.locator('.chat-bot').count()==1
-        assert 'Nie wysyłaj' in page.locator('.notice').inner_text()
+        assert 'Nie zostało wysłane' in page.locator('.assistant-inline-feedback').inner_text()
         assert not errors, errors
         print('PASS: online opt-in, limited payload, display source links, PII rejection, no JS errors')
         browser.close()

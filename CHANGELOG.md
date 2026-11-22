@@ -1,3 +1,14 @@
+## v0.6.4 — AI QA Fix + cztery widoczne tryby 2×2
+
+- Poprawiono błędne blokowanie ogólnych pytań zawierających słowa „pracownika służby cywilnej”, „pracownikowi” lub „PESEL” (bez prawdziwych identyfikatorów).
+- Pytania AI Online są weryfikowane przez Worker; lokalny matcher Offline nie blokuje już wywołania Online.
+- Worker rozpoznaje pytania o skalę 3/5/7, porównanie obu ścieżek, przygotowanie rozmowy, decyzję przełożonego i ochronę danych.
+- Komunikaty 422/429 rozróżniają brak źródeł, dane osobowe i limit zapytań; nie są automatycznie zastępowane nieodpowiednim wynikiem Offline.
+- Informacja o niewysłanym pytaniu jest widoczna wewnątrz panelu asystenta bez przesuwania pola wpisywania.
+- Wciąż obowiązują istniejące limity: 4 zapytania / 60 s / IP (przybliżony limit Cloudflare), wspólny limit 30 / 60 s.
+- Wymaga osobnej aktualizacji aplikacji GitHub Pages ORAZ prywatnego Cloudflare Workera.
+- Przetestowano testami lokalnymi i atrapami odpowiedzi API; nowe poprawki nie zostały jeszcze sprawdzone na produkcyjnym Gemini API.
+
 ## v0.6.3 — Stabilny asystent i czyszczenie rozmowy (2026-11-22)
 
 - Kompaktowy wybór czterech trybów pracy u góry panelu.
@@ -93,3 +104,5 @@
 
 ## v0.1 — Lokalny MVP
 - Działający demonstracyjny przebieg oceny z lokalną bazą wiedzy oraz eksportem.
+
+- Asystent: cztery zawsze widoczne przyciski wyboru trybu w siatce 2×2 zamiast listy rozwijanej; nie przemieszczają edytora.

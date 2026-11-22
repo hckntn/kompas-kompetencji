@@ -14,11 +14,11 @@ with sync_playwright() as p:
         mount(page)
         page.locator('.header-assistant-toggle').click()
         assert page.locator('.assistant').is_visible()
-        assert page.locator('#assistant-mode-select').is_visible()
+        assert page.locator('.assistant-mode-grid').is_visible()
         assert page.locator('.assistant-mode .mode-pill').count()==0
         bounds=[]
         for mode in ['offline','online','ollama','browser']:
-            page.locator('#assistant-mode-select').select_option(mode)
+            page.locator(f'.assistant-mode-choice[data-mode="{mode}"]').click()
             box=page.locator('#assistant-question').bounding_box()
             assert box and box['y']>120, (width,mode,box)
             bounds.append(round(box['y'],2))
@@ -31,7 +31,7 @@ with sync_playwright() as p:
             assert page.locator('.assistant-modal').count()==0
         assert max(bounds)-min(bounds)<2.5, (width,bounds)
         assert page.locator('#assistant-question').is_visible()
-        page.locator('#assistant-mode-select').select_option('offline')
+        page.locator('.assistant-mode-choice[data-mode="offline"]').click()
         page.locator('button[data-action="ask-preset"]').first.click()
         page.wait_for_function('document.querySelectorAll(".chat-bot").length>0')
         assert page.locator('.assistant-clear-button').is_enabled()
