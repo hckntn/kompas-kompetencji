@@ -1,6 +1,8 @@
+> **Uwaga dla jury:** Szybkie, niezależne scenariusze: [Scenariusze testowe — przewodnik](TESTING-GUIDE.md). W aplikacji wybierz **Scenariusze testowe** w kroku Rozpoczęcie.
+
 # Demo v0.4 — pierwsza ocena (PL)
 
-1. Otwórz `index.html`, kliknij **Wczytaj przykład pierwszej oceny** (wszystkie nazwiska fikcyjne).
+1. Otwórz `index.html`, wybierz **Scenariusze testowe → Pierwsza ocena — pozytywna** (wszystkie nazwiska fikcyjne).
 2. Pokaż pięć obowiązkowych elementów z § 2 rozporządzenia z 2015 r.
 3. Pokaż obserwacje behawioralne: jest to **materiał pomocniczy**, z osobną, nieurzędową skalą 1–4.
 4. Pokaż **Oceny cząstkowe**: przełożony ustala 3/5/7 pkt. Zmień jeden wynik na `3`, obserwuj aktualizację średniej; dwie trójki powodują wynik negatywny.

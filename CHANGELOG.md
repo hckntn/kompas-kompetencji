@@ -1,3 +1,52 @@
+## v0.6.2 — konfiguracja opublikowanego AI Online (22.11.2026)
+
+- Ustawiono zweryfikowany adres Cloudflare Worker w `data/online-config.js`, bez klucza API w kodzie.
+- Dwa rzeczywiste testy API (pierwsza ocena i przygotowanie rozmowy) zwróciły 200, `fallback: false`, z identyfikatorami źródeł.
+- Zsynchronizowano model archiwalnego Workera do `gemini-3.5-flash-lite` (produkcyjny Worker pozostaje w prywatnym repozytorium).
+- Bez zmian w Workflow Engine, formularzach, scenariuszach demo ani logice AI.
+- Status: **gotowe do testu przeglądarkowego po wdrożeniu**; nie oznacza to audytu poprawności prawnej. Po publikacji wymagany jest oddzielny test publicznego interfejsu GitHub Pages.
+
+## v0.6.2 — Focused UX (21.11.2026)
+
+- Ukryto panel asystenta przy pierwszym uruchomieniu; dostępny z przycisku w nagłówku, z obsługą klawisza Escape i zachowaniem niewysłanego pytania.
+- Usunięto powtarzane okruszki nawigacyjne, pozostawiono lewą nawigację i wskaźnik etapu.
+- Zastąpiono rozbudowany baner krótkim komunikatem z rozwijanymi szczegółami; osobne treści dla dwóch procedur.
+- Skrócono karty wyboru oceny; menu Scenariusze testowe pozostawiono bez dodatkowych stron.
+- Nie zmieniano modułów domenowych, AI API, session storage ani publicznego GitHub Pages.
+- W Chromium 1600×900 obszar główny wzrósł z 1068 do 1350 px, a formularz zaczyna się 134 px wyżej. Zob. `docs/UX-FOCUSED.md`.
+- Nowe testy UI w `tests/test_focused_ux.py`; dotychczasowe testy dostosowano do panelu otwieranego na żądanie.
+
+## v0.6.1 — Scenariusze testowe (21.11.2026)
+
+- Zastąpiono dwa przyciski przykładów jednym menu **Scenariusze testowe**; bez nowej nawigacji.
+- Dodano pięć fikcyjnych scenariuszy: wynik pozytywny, negatywny, brak danych, ścieżka okresowa, asystent źródłowy.
+- Zastosowano istniejący silnik ocen i walidacji (bez zmiany reguł kalkulacji).
+- Przed demonstracją zachowywana jest kopia sesji w `sessionStorage`; przywracanie po potwierdzeniu użytkownika.
+- Dodano testy w `tests/demo.test.cjs` i `tests/test_demo_ui.py`, przewodnik dla jury i zrzut ekranu menu.
+- Bez wdrażania usługi AI, bez zmian w publicznym GitHub Pages.
+
+# Changelog
+
+## v0.6 — Online AI candidate (2026-11-21)
+
+- Dodano osobny tryb **AI Online** wymagający wyraźnego włączenia przez użytkownika.
+- Dodano `js/online-ai.js` oraz `data/online-config.js` z pustym adresem Workera (brak automatycznych zapytań API).
+- Utworzono bezstanowy Cloudflare Worker proxy: Gemini API, tajny klucz, walidacja struktury żądania, ograniczanie danych, kontrola źródeł, CORS oraz limity żądań.
+- Do zewnętrznego AI nie wysyłamy automatycznie danych oceny, komentarzy, dokumentów ani HR.
+- Dodano testy nowej granicy API, opt-in i mechanizmu fallback; zachowano wszystkie dotychczasowe ścieżki i UI.
+- Publiczny projekt GitHub Pages **nie został zaktualizowany**; realny Gemini API wymaga wdrożenia Workera i testu klucza.
+- Dokumentacja: `docs/ONLINE-AI.md`, instrukcja rollback.
+
+---
+
+## v0.5 — AI WebGPU (21.11.2026)
+
+- Dodano opcjonalny model generatywny WebLLM / Qwen2.5 0.5B uruchamiany w przeglądarce po aktywacji użytkownika; bez płatnych API lub serwera.
+- Dodano jawny status ładowania, informację o wymaganiach sprzętowych i automatyczny powrót do odpowiedzi źródłowej w razie błędu.
+- Dodano bramkę źródeł przed generacją, ograniczenie nowych liczb w odpowiedziach prawnych oraz oznaczenia odpowiedzi LLM jako niezweryfikowanych.
+- Zachowano tryby Offline i Ollama oraz niezmieniony Workflow Engine i Institutional UI.
+- Testy jednostkowe AI i test integracji UI na zastępczym adapterze. Pełne uruchomienie modelu WebGPU na GPU pozostaje do sprawdzenia.
+
 # Historia zmian
 
 ## v0.4 — First Assessment Domain Rules (2026-11-21)

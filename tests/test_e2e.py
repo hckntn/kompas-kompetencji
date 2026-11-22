@@ -4,7 +4,7 @@ import re
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ('data/competencies.js','data/knowledge.js','data/procedures.js','data/first-rules.js','js/assessment.js','js/validation.js','js/workflow.js','js/session.js','js/engine.js','js/state.js','js/assistant.js','js/app.js')
+SCRIPTS = ('data/competencies.js','data/knowledge.js','data/online-config.js','data/procedures.js','data/first-rules.js','data/demo-scenarios.js','js/assessment.js','js/validation.js','js/workflow.js','js/session.js','js/engine.js','js/state.js','js/demo.js','js/browser-llm.js','js/online-ai.js','js/assistant.js','js/app.js')
 
 def mount(page, previous_state=None):
     # Browser navigation is blocked in this execution sandbox. Mount identical
@@ -92,6 +92,7 @@ def main():
         page.locator('button[data-action="switch-view"][data-view="workflow"]').first.click()
         page.screenshot(path=str(ROOT/'examples'/'workflow-v03.png'),full_page=True)
         # Offline assistant must not claim uncertain legal deadlines.
+        page.locator('.header-assistant-toggle').click()  # UX: assistant opens on demand
         page.locator('button[data-action="ask-preset"]').first.click()
         assert page.locator('.chat-bot').count()==1
         assert page.locator('.source-pill').count()>=1
@@ -99,6 +100,30 @@ def main():
         page.locator('.send-btn').click()
         page.wait_for_function('document.querySelectorAll(".chat-bot").length >= 2')
         assert 'Brak wystarczającej podstawy' in page.locator('.chat-bot').last.inner_text()
+        # Public static AI mode: explicit opt-in and source-grounded response.
+        page.locator('button[data-action="set-mode"][data-mode="browser"]').click()
+        assert page.locator('.browser-ai-settings').count()==1
+        assert page.locator('button[data-action="enable-browser-ai"]').count()==1
+        page.evaluate('''() => {
+          const ai = window.KOMPAS_BROWSER_LLM;
+          ai.__mockReady = false;
+          ai.ready = () => ai.__mockReady;
+          ai.prepare = async (notify) => {notify('Test: model wczytany');ai.__mockReady = true;};
+          ai.generate = async (q, sources) => {
+            window.__llmInput = {question:q, sourceIds:sources.map(s=>s.id)};
+            return 'Pierwsza ocena obejmuje pięć elementów [P1].';
+          };
+        }''')
+        page.locator('button[data-action="enable-browser-ai"]').click()
+        page.wait_for_function('window.KOMPAS_BROWSER_LLM.ready()')
+        page.locator('#assistant-question').fill('Jakie elementy pierwszej oceny?')
+        page.locator('.send-btn').click()
+        page.wait_for_function('document.querySelectorAll(".chat-bot").length >= 3')
+        assert 'pięć elementów' in page.locator('.chat-bot').last.inner_text()
+        assert 'P1' in page.evaluate('window.__llmInput.sourceIds')
+        assert page.locator('.chat-bot').last.locator('.chat-mode').count() == 1
+        # Access to personal case data is never part of the prompt assembled in assistant.js.
+        assert 'Alicja Nowak' not in str(page.evaluate('window.__llmInput'))
         # Chromium print emulates save-as-PDF; report print CSS is checked separately.
         page.pdf(path=str(ROOT/'examples'/'sample-report.pdf'),format='A4',print_background=True)
         assert not errors, '\n'.join(errors)
@@ -150,7 +175,9 @@ def main():
         assert (ROOT/'examples'/'first-sample-report.pdf').stat().st_size > 5000
         assert not second_errors,'\n'.join(second_errors)
         page2.locator('button[data-action="go-step"][data-step="0"]').click()
-        page2.locator('button[data-action="load-demo"]').click()
+        page2.on('dialog', lambda dialog: dialog.accept())
+        page2.locator('button[data-action="toggle-demo-menu"]').click()
+        page2.locator('button[data-action="start-demo"][data-id="periodic-demo"]').click()
         demo=page2.evaluate('window.KOMPAS_DEBUG.getState()')
         assert demo['case']['track']=='periodic' and len(demo['observations'])==12
         assert page2.evaluate('window.KOMPAS_DEBUG.totals().allObserved') is True

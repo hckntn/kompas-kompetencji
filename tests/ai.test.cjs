@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.resolve(__dirname,'..');
+const window={};
+const ctx=vm.createContext({window,console});
+for(const file of ['data/knowledge.js','js/assistant.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx,{filename:file});
+const A=window.KOMPAS_ASSISTANT;
+let calls=0, lastEvidence;
+window.KOMPAS_BROWSER_LLM={ready:()=>true,generate:async (q,evidence)=>{calls++;lastEvidence=evidence;return 'Pierwsza ocena obejmuje pięć elementów [P1].';}};
+(async()=>{
+  let r=await A.ask('Jakie elementy pierwszej oceny?',{mode:'browser'});
+  assert.equal(r.mode,'browser');assert.equal(r.supported,true);assert.ok(r.sources.some(x=>x.id==='P1'));
+  assert.ok(lastEvidence.every(s=>typeof s.text==='string' && s.id));
+  assert.equal(calls,1,'on-device generation used after source retrieval');
+  r=await A.ask('Jaki jest dokładny termin odwołania?',{mode:'browser'});
+  assert.equal(r.supported,false);assert.equal(calls,1,'no unsupported legal query sent to LLM');
+  window.KOMPAS_BROWSER_LLM.generate=async()=>{calls++;return 'Zgodnie z prawem masz 99 dni na odwołanie.';};
+  r=await A.ask('Jakie elementy pierwszej oceny?',{mode:'browser'});
+  assert.equal(r.mode,'offline');assert.ok(r.text.includes('liczby bez potwierdzenia'));
+  window.KOMPAS_BROWSER_LLM.ready=()=>false;
+  await assert.rejects(()=>A.ask('Jakie elementy pierwszej oceny?',{mode:'browser'}),/uruchom model/i);
+  console.log('PASS: sourced browser LLM, no-source refusal, ungrounded-number fallback, model readiness guard');
+})().catch(e=>{console.error(e);process.exitCode=1;});

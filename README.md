@@ -1,3 +1,15 @@
+## Focused UX — v0.6.2
+
+W tej wersji **Asystent wiedzy** otwiera się przyciskiem **Asystent** w nagłówku. Domyślnie jest zwinięty, aby nie zasłaniał procesu oceny. `Escape` zamyka panel; podczas testu scenariusza `Asystent wiedzy` otwiera się automatycznie. Opis ograniczeń prototypu jest zwięzły i rozwijany przyciskiem **Szczegóły**. Menu **Scenariusze testowe** nadal jest dostępne na pierwszym etapie.
+
+**Wydanie v0.6.2:** sprawdzona baza kodu do konkursowego demo. Weryfikację działania strony i AI w opublikowanym interfejsie wykonaj po aktualizacji GitHub Pages. Zob. [testy](docs/UX-FOCUSED.md).
+
+## Scenariusze testowe (v0.6.2)
+
+W kroku **Rozpoczęcie** wybierz **Scenariusze testowe**. Menu obejmuje pięć fikcyjnych przypadków, wyników nie symuluje: sprawdza je istniejący silnik. **Przywróć sesję** odtwarza dane sprzed demonstracji. [Instrukcja dla jury](docs/TESTING-GUIDE.md).
+
+**AI Online:** publiczny adres Workera jest skonfigurowany. Dwa zapytania do Gemini API przez Worker zwróciły HTTP 200 z `fallback: false` (22.11.2026); integracja w opublikowanym interfejsie GitHub Pages nadal wymaga próby po aktualizacji strony.
+
 # Kompas Kompetencji
 
 **Prototyp konkursowy HackNation 2026 — zadanie „Kompas Kompetencji” (Ministerstwo Cyfryzacji).**
@@ -6,21 +18,21 @@
 
 Kompas Kompetencji to aplikacja wspierająca przełożonych w prowadzeniu ocen pracowników służby cywilnej. Łączy uporządkowany proces, pomocnicze wskaźniki zachowań, reguły oceny, przygotowanie rozmowy oraz roboczą dokumentację. **Oceny cząstkowe wybiera przełożony — aplikacja nie zastępuje jego decyzji.**
 
-> **Status: v0.4 — działający prototyp demonstracyjny.** Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
+> **Status: v0.6.2 — Online AI + Scenariusze testowe + Focused UX.** Worker wdrożono osobno, a Gemini zwrócił rzeczywiste odpowiedzi na pytania o pierwszą ocenę i przygotowanie rozmowy (22.11.2026). Integracja w publicznym interfejsie wymaga odrębnego testu po wdrożeniu. Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
 
 ![Widok pierwszej oceny](examples/first-path.png)
 
 ## Jak przetestować demo
 
 1. Otwórz [wersję online](https://hckntn.github.io/kompas-kompetencji/) na komputerze.
-2. Kliknij **„Wczytaj przykład pierwszej oceny”**.
+2. Wybierz **„Scenariusze testowe → Pierwsza ocena — pozytywna”**.
 3. Przejdź przez sześć etapów: **Rozpoczęcie → Kryteria → Obserwacje → Rekomendacja / decyzja → Rozmowa → Dokument**.
 4. Sprawdź pięć elementów pierwszej oceny i oceny cząstkowe **3 / 5 / 7**, które wybiera przełożony.
 5. Zapoznaj się z wynikiem i warunkami formalnymi, a następnie wygeneruj **raport roboczy** (druk / zapis do PDF albo eksport JSON/TXT).
 
-Przycisk **„Wczytaj przykład okresowy”** uruchamia drugą ścieżkę, która w v0.4 pozostaje **demonstracyjna**.
+Scenariusz **„Ocena okresowa — demo”** uruchamia drugą ścieżkę, która pozostaje **demonstracyjna**.
 
-## Co działa w wersji v0.4
+## Co działa w wersji v0.5 (na bazie v0.4)
 
 - **Workflow Engine** — prowadzenie przez etapy, walidacja przejść, stan procesu i historia techniczna.
 - **Pierwsza ocena** — pięć elementów wskazanych w rozporządzeniu z 23 lipca 2015 r. (Dz.U. 2015 poz. 1144).
@@ -41,6 +53,24 @@ Przycisk **„Wczytaj przykład okresowy”** uruchamia drugą ścieżkę, któr
 
 Szczegółowa lista wdrożonych funkcji i braków znajduje się w [docs/DOMAIN-COMPLIANCE.md](docs/DOMAIN-COMPLIANCE.md) (obecnie dokument roboczy w języku rosyjskim).
 
+## Tryb AI Online — nowość w v0.6
+
+Dodano połączenie z generatywnym modelem językowym przez **Cloudflare Worker + Gemini API** z kluczem wyłącznie po stronie Workera. Adres Workera został skonfigurowany w `data/online-config.js`: `https://kompas-kompetencji-ai.hckntn.workers.dev`. Klucz znajduje się tylko w Cloudflare Secrets. **Ta paczka nie została jeszcze opublikowana na GitHub Pages.**
+
+Asystent wymaga wyraźnej zgody na przekazanie pytania do zewnętrznego dostawcy AI. Aplikacja nie dołącza automatycznie danych z oceny pracownika, a serwer samodzielnie wybiera dopuszczone materiały źródłowe. System nie nadaje się do przetwarzania rzeczywistych danych osobowych: filtr PII nie jest niezawodny, a bezpłatne API może używać danych do ulepszania produktów.
+
+**Weryfikacja:** 22.11.2026 wykonano dwa ręczne zapytania z przeglądarki: o elementy pierwszej oceny oraz przygotowanie rozmowy. Oba zwróciły HTTP 200, `fallback: false`; integracja w nowym interfejsie wymaga testu po publikacji. Pełna instrukcja: [docs/ONLINE-AI.md](docs/ONLINE-AI.md).
+
+## Test asystenta AI WebGPU (eksperymentalnie)
+
+1. Otwórz aplikację na komputerze w aktualnym Chrome lub Edge z obsługą WebGPU.
+2. Naciśnij **Asystent** w nagłówku. W panelu **Asystent wiedzy** wybierz **AI WebGPU**, a następnie **Uruchom AI w przeglądarce**.
+3. Przy pierwszym uruchomieniu potrzebny jest internet i pobranie dużych plików modelu; nie wymagamy kluczy API ani płatnych usług.
+4. Zapytaj np. **„Jakie elementy pierwszej oceny?”** lub **„Jak przygotować rozmowę z pracownikiem?”**. Odpowiedzi AI są oznaczone jako wygenerowane i powiązane z kontekstem źródłowym.
+5. Pytanie bez potwierdzonego źródła powinno zostać odrzucone **bez uruchamiania LLM**. Gdy model jest niedostępny, można wrócić do **Offline**.
+
+**Weryfikacja:** testy automatyczne obejmują sterowanie modelem i odpowiedzi z testowym adapterem, ale nie potwierdzają pobrania modelu i generacji na GPU w przeglądarce jury. Zob. [AI-ASSISTANT.md](docs/AI-ASSISTANT.md).
+
 ## Uruchomienie lokalne
 
 1. Wybierz w repozytorium **Code → Download ZIP** i rozpakuj archiwum.
@@ -58,7 +88,7 @@ Projekt używa **vanilla JavaScript, HTML i CSS**, bez frameworka i procesu budo
 | `data/first-rules.js` | Wybrane formalne reguły pierwszej oceny |
 | `data/procedures.js`, `data/competencies.js` | Definicje ścieżek i kryteriów |
 | `js/workflow.js`, `js/validation.js`, `js/assessment.js`, `js/session.js` | Silnik procesu |
-| `js/assistant.js` | Asystent źródłowy i opcjonalny tryb Ollama |
+| `js/assistant.js`, `js/online-ai.js` | Asystent źródłowy, adapter Online AI i opcjonalne tryby eksperymentalne |
 | `js/app.js`, `assets/` | Interfejs Gov.pl-inspired Institutional UI |
 
 Dokumentacja, scenariusz demo i historia zmian: katalog `docs/` i [CHANGELOG.md](CHANGELOG.md).
@@ -69,8 +99,12 @@ Repozytorium zawiera testy jednostkowe i przeglądarkowe:
 
 ```bash
 node tests/core.test.cjs
+node tests/ai.test.cjs
+node worker/test.mjs
+python tests/test_online_ui.py
 python tests/test_e2e.py
 python tests/test_institutional_ui.py
+python tests/test_focused_ux.py
 ```
 
 Narzędzia testowe wymagają Node.js oraz środowiska Python/Playwright/Chromium; nie są potrzebne do uruchomienia samej aplikacji.
@@ -82,6 +116,6 @@ Narzędzia testowe wymagają Node.js oraz środowiska Python/Playwright/Chromium
 - [ELI — Dz.U. 2016 poz. 470, ocena okresowa](https://eli.gov.pl/api/acts/DU/2016/470/text.html)
 - [KPRM — Ocena okresowa](https://www.gov.pl/web/sluzbacywilna/ocena-okresowa)
 
-**Kolejne kroki:** integracja oficjalnych wskaźników i formularzy, pełna ścieżka oceny okresowej, weryfikowalny asystent LLM z odwołaniami do źródeł oraz model bezpieczeństwa i uprawnień.
+**Kolejne kroki:** wdrożenie i weryfikacja Online AI na osobnym adresie, integracja oficjalnych wskaźników i formularzy, pełna ścieżka oceny okresowej, weryfikowalny asystent LLM z odwołaniami do źródeł oraz model bezpieczeństwa i uprawnień.
 
 Materiały konkursowe: [opis wyzwania](references/opis-wyzwania.pdf), [regulamin](references/regulamin-zadania.pdf).

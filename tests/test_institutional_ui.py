@@ -30,7 +30,9 @@ with sync_playwright() as p:
             assert page.locator('main#main-content').count() == 1
             if width == 1600:
                 page.screenshot(path=str(TEST_DIR.parent / 'examples' / 'start-screen.png'), full_page=True)
-                page.locator('button[data-action="load-demo"]').click()
+                page.on('dialog', lambda dialog: dialog.accept())
+                page.locator('button[data-action="toggle-demo-menu"]').click()
+                page.locator('button[data-action="start-demo"][data-id="periodic-demo"]').click()
                 page.locator('button[data-action="go-step"][data-step="3"]').click()
                 assert page.locator('h1').first.inner_text() == 'Rekomendacja i decyzja'
                 page.screenshot(path=str(TEST_DIR.parent / 'examples' / 'result-screen.png'), full_page=True)

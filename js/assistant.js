@@ -27,6 +27,27 @@ window.KOMPAS_ASSISTANT = (function () {
   }
   async function ask(query,config){
     const baseline=offline(query);
+    if(config.mode==='online') {
+      if(!baseline.supported || !baseline.sources.length) return baseline;
+      if(!window.KOMPAS_ONLINE_AI) throw new Error('AI Online niedostępny.');
+      return window.KOMPAS_ONLINE_AI.ask(query);
+    }
+    if(config.mode==='browser') {
+      // Retrieval gate: never ask the LLM a question we cannot ground.
+      if(!baseline.supported || !baseline.sources.length)return baseline;
+      if(!window.KOMPAS_BROWSER_LLM?.ready())throw new Error('Najpierw uruchom model AI w przeglądarce.');
+      const answer=await window.KOMPAS_BROWSER_LLM.generate(query, baseline.sources);
+      if(/brak wystarczając(?:ych|ej) danych|brak danych w bazie wiedzy/i.test(answer))
+        return {text:'Brak wystarczających danych w bazie wiedzy, aby odpowiedzieć wiarygodnie.',sources:[],supported:false,mode:'browser'};
+      // Legal numerals/sections are not allowed to appear unless in the supplied evidence.
+      if(baseline.sources.some(s=>s.legal)) {
+        const evidence=baseline.sources.map(s=>s.text+' '+s.answer).join(' ');
+        const numbers=(answer.match(/(?:§\s*)?\d+(?:[.,]\d+)?/g)||[]).map(x=>x.replace(/[^0-9.,]/g,''));
+        if(numbers.some(n=>!evidence.includes(n)))
+          return {text:baseline.text+'\n\nUwaga: wygenerowana odpowiedź zawierała liczby bez potwierdzenia w przywołanym materiale, dlatego pokazano odpowiedź źródłową.',sources:baseline.sources,supported:true,mode:'offline'};
+      }
+      return {text:answer,sources:baseline.sources,supported:true,mode:'browser'};
+    }
     if(config.mode!=='ollama')return baseline;
     if(!baseline.supported)return baseline;
     const evidence=find(query).map(x=>`[${x.source.id}] ${x.source.title}: ${x.source.text}`).join('\n');
