@@ -14,6 +14,8 @@
   let browserAiLoading=false;
   let browserAiProgress='';
   const browserAi=window.KOMPAS_BROWSER_LLM;
+  const APP_VERSION=document.querySelector('meta[name="kompas-version"]')?.content||'wersja nieznana';
+  document.title=`Kompas Kompetencji — HackNation MVP ${APP_VERSION}`;
   const root=document.getElementById('app');
   const q=sel=>document.querySelector(sel);
   const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -29,7 +31,7 @@
   function currentStatus(){if(state.finalized)return ['Zakończona','success']; if(state.step>=3)return ['W trakcie oceny','warning'];return ['W przygotowaniu','neutral'];}
   function renderHeader(){
     const status=currentStatus();
-    return `<header class="app-header"><div class="header-left"><div class="brand-symbol" aria-hidden="true"><span class="brand-needle">✦</span></div><div class="brand-text"><strong>kompas<span>kompetencji</span></strong><small>HACKNATION 2026 · PROTOTYP</small></div><div class="header-divider"></div><div class="header-context">Środowisko demonstracyjne <span class="header-dot"></span> <b>Offline ready</b></div></div><div class="header-actions"><button type="button" class="header-assistant-toggle" data-action="toggle-assistant" aria-expanded="${assistantOpen}" aria-controls="knowledge-assistant" aria-label="${assistantOpen?'Zamknij asystenta wiedzy':'Otwórz asystenta wiedzy'}"><span aria-hidden="true">✳</span> Asystent</button>${smallStamp(status[0],status[1])}<div class="avatar" title="Rola demonstracyjna: Przełożony">MZ</div></div></header>`;
+    return `<header class="app-header"><div class="header-left"><div class="brand-symbol" aria-hidden="true"><span class="brand-needle">✦</span></div><div class="brand-text"><strong>kompas<span>kompetencji</span></strong><small>HACKNATION 2026 · PROTOTYP <span class="brand-version" aria-label="Wersja aplikacji ${escapeHtml(APP_VERSION)}">${escapeHtml(APP_VERSION)}</span></small></div><div class="header-divider"></div><div class="header-context">Środowisko demonstracyjne <span class="header-dot"></span> <b>Offline ready</b></div></div><div class="header-actions"><button type="button" class="header-assistant-toggle" data-action="toggle-assistant" aria-expanded="${assistantOpen}" aria-controls="knowledge-assistant" aria-label="${assistantOpen?'Zamknij asystenta wiedzy':'Otwórz asystenta wiedzy'}"><span aria-hidden="true">✳</span> Asystent</button>${smallStamp(status[0],status[1])}<div class="avatar" title="Rola demonstracyjna: Przełożony">MZ</div></div></header>`;
   }
   function stepAllowed(n){return E.nextGuard(state,n).ok;}
   function renderSidebar(){

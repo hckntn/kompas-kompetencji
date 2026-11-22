@@ -60,6 +60,7 @@
   .brand-text strong { color: #fff; font-size: 21px; letter-spacing: -.45px; }
   .brand-text strong span { color: #E5EFF7; font-weight: 450; }
   .brand-text small { color: #D3E0EC; font-size: 11px; font-weight: 650; margin-top: 5px; letter-spacing: .35px; }
+  .brand-version { color: #FFF; font-weight: 800; margin-left: 5px; font-variant-numeric: tabular-nums; letter-spacing: .2px; white-space: nowrap; }
   .header-divider { height: 38px; background: rgba(255,255,255,.3); }
   .header-context { color: #DCE9F3; font-size: 13px; }
   .header-context b { color: #E8F7EC; font-size: 12px; }

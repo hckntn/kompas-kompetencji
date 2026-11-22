@@ -1,16 +1,16 @@
-**v0.6.4:** poprawki AI QA i cztery widoczne tryby AI (siatka 2×2). Frontend i Cloudflare Worker wymagają zsynchronizowanego wdrożenia.
+**Aktualna wersja: v0.6.5.** Numer wydania jest widoczny w górnym pasku obok nazwy projektu. Zmiana numeru: `index.html` → `meta[name="kompas-version"]`; nagłówek i tytuł karty aktualizują się automatycznie.
 
 ## Focused UX — v0.6.2
 
 W tej wersji **Asystent wiedzy** otwiera się przyciskiem **Asystent** w nagłówku. Domyślnie jest zwinięty, aby nie zasłaniał procesu oceny. `Escape` zamyka panel; podczas testu scenariusza `Asystent wiedzy` otwiera się automatycznie. Opis ograniczeń prototypu jest zwięzły i rozwijany przyciskiem **Szczegóły**. Menu **Scenariusze testowe** nadal jest dostępne na pierwszym etapie.
 
-**Wersja kandydująca:** ta paczka nie została automatycznie opublikowana w repozytorium ani na GitHub Pages. Zob. [porównanie i testy](docs/UX-FOCUSED.md).
+**Publikacja:** kod jest utrzymywany w repozytorium GitHub. Po aktualizacji sprawdź numer wersji na stronie demonstracyjnej. Zob. [testy i układ](docs/UX-FOCUSED.md).
 
 ## Scenariusze testowe (v0.6.2)
 
 W kroku **Rozpoczęcie** wybierz **Scenariusze testowe**. Menu obejmuje pięć fikcyjnych przypadków, wyników nie symuluje: sprawdza je istniejący silnik. **Przywróć sesję** odtwarza dane sprzed demonstracji. [Instrukcja dla jury](docs/TESTING-GUIDE.md).
 
-**AI Online:** publiczny adres Workera jest skonfigurowany. Dwa zapytania do Gemini API przez Worker zwróciły HTTP 200 z `fallback: false` (22.11.2026); integracja w opublikowanym interfejsie GitHub Pages nadal wymaga próby po aktualizacji strony.
+**AI Online:** Worker jest skonfigurowany, a użytkownik potwierdził działanie pytań testowych w przeglądarce. Nie przesyłaj danych rzeczywistych pracowników.
 
 # Kompas Kompetencji
 
@@ -20,7 +20,7 @@ W kroku **Rozpoczęcie** wybierz **Scenariusze testowe**. Menu obejmuje pięć f
 
 Kompas Kompetencji to aplikacja wspierająca przełożonych w prowadzeniu ocen pracowników służby cywilnej. Łączy uporządkowany proces, pomocnicze wskaźniki zachowań, reguły oceny, przygotowanie rozmowy oraz roboczą dokumentację. **Oceny cząstkowe wybiera przełożony — aplikacja nie zastępuje jego decyzji.**
 
-> **Status: v0.6.2 — Online AI + Scenariusze testowe + Focused UX (wersja kandydująca).** Publiczne demo nadal korzysta z v0.4; Worker wdrożono osobno, a Gemini zwrócił rzeczywiste odpowiedzi na pytania o pierwszą ocenę i przygotowanie rozmowy (22.11.2026). Integracja w interfejsie wymaga jeszcze testu na GitHub Pages. Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
+> **Status: v0.6.5 — prototyp demonstracyjny z Online AI, scenariuszami testowymi i stabilnym panelem asystenta.** Użytkownik potwierdził działanie odpowiedzi Online AI i testowych pytań w opublikowanej wersji v0.6.4 (22.11.2026). Nie jest to oficjalny system administracji publicznej ani narzędzie dopuszczone do oceny rzeczywistych pracowników. Wszystkie dane przykładowe są fikcyjne.
 
 ![Widok pierwszej oceny](examples/first-path.png)
 

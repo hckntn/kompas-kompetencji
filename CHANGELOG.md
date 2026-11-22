@@ -1,3 +1,9 @@
+## v0.6.5 — Widoczna wersja aplikacji (2026-11-22)
+
+- Numer bieżącego wydania jest stale widoczny w lewym górnym rogu, obok nazwy projektu, jako dyskretny tekst `v0.6.5`.
+- Źródłem numeru wersji jest jeden znacznik `meta[name="kompas-version"]` w `index.html`; nagłówek i tytuł karty pobierają go automatycznie.
+- Bez zmian w procedurach ocen, AI Online, Cloudflare Worker i danych sesji.
+
 ## v0.6.4 — AI QA Fix + cztery widoczne tryby 2×2
 
 - Poprawiono błędne blokowanie ogólnych pytań zawierających słowa „pracownika służby cywilnej”, „pracownikowi” lub „PESEL” (bez prawdziwych identyfikatorów).
